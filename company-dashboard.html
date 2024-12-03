@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .dashboard-container { padding: 20px; }
+        .stats-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand">Company Dashboard</a>
+            <div class="d-flex">
+                <span class="navbar-text me-3">
+                    <strong>Company:</strong> <span id="companyName"></span>
+                </span>
+                <span class="navbar-text me-3">
+                    <strong>Zone:</strong> <span id="companyZone"></span>
+                </span>
+                <button class="btn btn-outline-light" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid dashboard-container">
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h5>Total Chemicals Manufactured</h5>
+                    <h2 id="totalManufactured">0</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h5>Current Stock</h5>
+                    <h2 id="currentStock">0</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h5>Active Orders</h5>
+                    <h2 id="activeOrders">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="list-group">
+                    <button class="list-group-item list-group-item-action active" onclick="showSection('manufacturing')">Manufacturing</button>
+                    <button class="list-group-item list-group-item-action" onclick="showSection('purchasing')">Purchasing</button>
+                    <button class="list-group-item list-group-item-action" onclick="showSection('sales')">Sales Dashboard</button>
+                    <button class="list-group-item list-group-item-action" onclick="showSection('transport')">Transport Dashboard</button>
+                    <button class="list-group-item list-group-item-action" onclick="showSection('track')">Track Dashboard</button>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <!-- Manufacturing Section -->
+                <div id="manufacturing" class="section-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Manufacturing Entry</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="manufacturingForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Chemical Type</label>
+                                        <select class="form-select" name="chemicalType" id="chemicalType" required></select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Quantity (in KG)</label>
+                                        <input type="number" class="form-control" name="quantity" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Manufacturing Date</label>
+                                        <input type="datetime-local" class="form-control" name="manufacturingDate" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Expiry Date</label>
+                                        <input type="date" class="form-control" name="expiryDate" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add Manufacturing Entry</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Manufacturing History</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Manufacturing ID</th>
+                                            <th>Chemical Type</th>
+                                            <th>Quantity</th>
+                                            <th>Manufacturing Date</th>
+                                            <th>Expiry Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="manufacturingHistory"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Purchasing Section -->
+                <div id="purchasing" class="section-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Place Purchase Order</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="purchaseForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Select Company</label>
+                                    <select class="form-select" name="sellerCompany" required></select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Chemical Type</label>
+                                    <select class="form-select" name="chemicalType" required></select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Quantity (in KG)</label>
+                                    <input type="number" class="form-control" name="quantity" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Purpose</label>
+                                    <textarea class="form-control" name="purpose" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Delivery Address</label>
+                                    <textarea class="form-control" name="deliveryAddress" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Place Order</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sales Dashboard -->
+                <div id="sales" class="section-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Received Orders</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Company Name</th>
+                                            <th>Chemical Type</th>
+                                            <th>Quantity</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="receivedOrders"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transport Dashboard -->
+                <div id="transport" class="section-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Initiate Transport</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="acceptedOrders"></div>
+                            <form id="transportForm" class="mt-3">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Vehicle Number</label>
+                                        <input type="text" class="form-control" name="vehicleNumber" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Driver Name</label>
+                                        <input type="text" class="form-control" name="driverName" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Time of Transfer</label>
+                                    <input type="datetime-local" class="form-control" name="transferTime" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Initiate Transport</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Transport History</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Transport ID</th>
+                                            <th>Company Name</th>
+                                            <th>Vehicle Details</th>
+                                            <th>Transfer Time</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transportHistory"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track Dashboard -->
+                <div id="track" class="section-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Track Shipments</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Transport ID</th>
+                                            <th>From/To</th>
+                                            <th>Vehicle Details</th>
+                                            <th>Current Location</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="trackingData"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="company-dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCB Analytics Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --saffron: #FF9933;
+            --white: #FFFFFF;
+            --green: #138808;
+            --blue: #000080;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .dashboard-container {
+            padding: 20px;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border: none;
+        }
+
+        .card-header {
+            background-color: var(--blue);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            padding: 15px;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, var(--saffron), var(--green));
+            color: white;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .alert-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+        }
+
+        .map-container {
+            height: 400px;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .live-feed {
+            height: 300px;
+            overflow-y: auto;
+        }
+
+        .feed-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feed-item:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--blue);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">NCB Analytics Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Main Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Analytics</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-outline-light" onclick="location.href='index.html'">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="row">
+            <!-- Quick Stats -->
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5>Total Companies</h5>
+                        <h2 id="totalCompanies">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5>Active Transports</h5>
+                        <h2 id="activeTransports">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5>Active Alerts</h5>
+                        <h2 id="activeAlerts">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5>Total Orders</h5>
+                        <h2 id="totalOrders">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <!-- Chemical Distribution Chart -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Chemical Distribution by Zone
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="chemicalDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alert Trends -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Alert Trends
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="alertTrendsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <!-- Live Transport Map -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        Live Transport Tracking
+                    </div>
+                    <div class="card-body">
+                        <div id="map" class="map-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Feed -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        Live Updates
+                    </div>
+                    <div class="card-body">
+                        <div id="liveFeed" class="live-feed"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+    <script type="module">
+        import { generateAnalytics, initializeGPSTracking, updateTransportLocation } from './js/utils.js';
+
+        // Initialize dashboard
+        async function initDashboard() {
+            const analytics = await generateAnalytics();
+            if (!analytics) return;
+
+            updateQuickStats(analytics);
+            initializeCharts(analytics);
+            initializeMap();
+            startLiveFeed();
+        }
+
+        function updateQuickStats(analytics) {
+            document.getElementById('totalCompanies').textContent = 
+                Object.values(analytics.companyStats.zoneWise).reduce((a, b) => a + b, 0);
+            document.getElementById('activeTransports').textContent = 
+                analytics.transportStats.byStatus['in-transit'] || 0;
+            document.getElementById('activeAlerts').textContent = 
+                analytics.alertStats.byStatus?.ACTIVE || 0;
+            document.getElementById('totalOrders').textContent = 
+                analytics.orderStats.total || 0;
+        }
+
+        function initializeCharts(analytics) {
+            // Chemical Distribution Chart
+            const chemCtx = document.getElementById('chemicalDistributionChart').getContext('2d');
+            new Chart(chemCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(analytics.companyStats.zoneWise),
+                    datasets: [{
+                        label: 'Companies per Zone',
+                        data: Object.values(analytics.companyStats.zoneWise),
+                        backgroundColor: ['#FF9933', '#FFFFFF', '#138808', '#000080']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Alert Trends Chart
+            const alertCtx = document.getElementById('alertTrendsChart').getContext('2d');
+            new Chart(alertCtx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(analytics.alertStats.byZone),
+                    datasets: [{
+                        label: 'Alerts by Zone',
+                        data: Object.values(analytics.alertStats.byZone),
+                        borderColor: '#FF9933',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function initializeMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 20.5937, lng: 78.9629 },
+                zoom: 5
+            });
+
+            // TODO: Add markers for active transports
+        }
+
+        function startLiveFeed() {
+            const liveFeed = document.getElementById('liveFeed');
+            
+            // Simulated live feed updates
+            setInterval(() => {
+                const events = [
+                    'New transport registered',
+                    'Alert: Route deviation detected',
+                    'Company updated inventory',
+                    'New order placed',
+                    'Transport completed successfully'
+                ];
+
+                const event = events[Math.floor(Math.random() * events.length)];
+                const timestamp = new Date().toLocaleTimeString();
+
+                const feedItem = document.createElement('div');
+                feedItem.className = 'feed-item';
+                feedItem.innerHTML = `
+                    <small class="text-muted">${timestamp}</small>
+                    <div>${event}</div>
+                `;
+
+                liveFeed.insertBefore(feedItem, liveFeed.firstChild);
+
+                if (liveFeed.children.length > 50) {
+                    liveFeed.removeChild(liveFeed.lastChild);
+                }
+            }, 5000);
+        }
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>

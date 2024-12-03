@@ -1,0 +1,157 @@
+{
+  "ncbAdmin": {
+    "username": "admin@ncb.gov.in",
+    "password": "NCB@2024",
+    "role": "admin"
+  },
+  "companies": [
+    {
+      "companyName": "A",
+      "urnNumber": "URN123",
+      "email": "a@gmail.com",
+      "password": "123",
+      "address": "Gentry Emerson Inc\nAspernatur dolor inc",
+      "issueDate": "2024-11-30",
+      "expirationDate": "2024-12-01",
+      "chemicals": [
+        "Acetic anhydride",
+        "Sulphuric acid"
+      ],
+      "activities": [
+        "Manufacturing",
+        "Purchasing",
+        "Selling"
+      ],
+      "zone": "North Zone",
+      "createdAt": "2024-11-30T09:33:30.942Z",
+      "id": 1
+    },
+    {
+      "companyName": "B",
+      "urnNumber": "URN456",
+      "email": "b@gmail.com",
+      "password": "456",
+      "address": "hello",
+      "issueDate": "2024-11-28",
+      "expirationDate": "2024-11-28",
+      "chemicals": [
+        "Acetic anhydride",
+        "Sulphuric acid"
+      ],
+      "activities": [
+        "Manufacturing",
+        "Exporting",
+        "Purchasing",
+        "Selling"
+      ],
+      "zone": "North Zone",
+      "createdAt": "2024-11-30T09:40:32.821Z",
+      "id": 2
+    },
+    {
+      "companyName": "C",
+      "urnNumber": "URN789",
+      "email": "admin@ncb.gov.in",
+      "password": "789",
+      "address": "good",
+      "issueDate": "2024-11-30",
+      "expirationDate": "2024-12-07",
+      "chemicals": [
+        "Sulphuric acid"
+      ],
+      "activities": [
+        "Manufacturing",
+        "Exporting",
+        "Purchasing",
+        "Selling"
+      ],
+      "zone": "South Zone",
+      "createdAt": "2024-11-30T09:42:00.066Z",
+      "id": 3
+    }
+  ],
+  "zonalOfficers": [
+    {
+      "zone": "North Zone",
+      "officerId": "123",
+      "officerName": "Kamesh",
+      "email": "o@gmail.com",
+      "password": "098",
+      "createdAt": "2024-11-30T10:04:24.327Z",
+      "id": 1
+    }
+  ],
+  "manufacturing": [
+    {
+      "companyId": 1,
+      "chemicalType": "Acetic anhydride",
+      "quantity": 100,
+      "manufacturingDate": "2024-11-30T15:04",
+      "expiryDate": "2024-12-01",
+      "manufacturingId": "m43z7zlwswv1oks9fu",
+      "createdAt": "2024-11-30T09:34:57.284Z",
+      "sold": 0,
+      "id": 1
+    }
+  ],
+  "orders": [
+    {
+      "buyerId": 3,
+      "buyerName": "C",
+      "sellerId": "1",
+      "chemicalType": "Sulphuric acid",
+      "quantity": 100,
+      "purpose": "raw materi",
+      "deliveryAddress": "home",
+      "status": "accepted",
+      "orderId": "m43zjihroxw7jyc1yqb",
+      "createdAt": "2024-11-30T09:43:54.975Z",
+      "id": 1,
+      "processedAt": "2024-11-30T09:45:14.990Z"
+    },
+    {
+      "buyerId": 3,
+      "buyerName": "C",
+      "sellerId": "1",
+      "chemicalType": "Sulphuric acid",
+      "quantity": 100,
+      "purpose": "Nothing",
+      "deliveryAddress": "50,Devagar colony\nSalai road",
+      "status": "accepted",
+      "orderId": "m43zkebaz2z5v9c1w3c",
+      "createdAt": "2024-11-30T09:44:36.214Z",
+      "id": 2,
+      "processedAt": "2024-11-30T09:45:22.797Z"
+    }
+  ],
+  "transport": [
+    {
+      "companyId": 1,
+      "companyName": "A",
+      "zone": "North Zone",
+      "vehicleNumber": "1",
+      "driverName": "kamesh",
+      "transferTime": "2024-11-30T15:15",
+      "transportId": "m43zm1jd83gndzl3mjj",
+      "status": "in-transit",
+      "currentLocation": "Starting point",
+      "tamperStatus": "OK",
+      "createdAt": "2024-11-30T09:45:52.969Z",
+      "id": 1
+    }
+  ],
+  "alerts": [],
+  "reports": [
+    {
+      "transportId": "m43zm1jd83gndzl3mjj",
+      "reportType": "suspicious",
+      "description": "",
+      "officerId": "123",
+      "officerName": "Kamesh",
+      "zone": "North Zone",
+      "status": "pending",
+      "createdAt": "2024-12-01T18:17:50.795Z",
+      "id": 1
+    }
+  ]
+}
